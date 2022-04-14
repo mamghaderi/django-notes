@@ -1,0 +1,295 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /notes/:
+    get:
+      operationId: listNotes
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - notes
+    post:
+      operationId: createNote
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - notes
+  /notes/{id}/:
+    get:
+      operationId: retrieveNote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this note.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - notes
+    put:
+      operationId: updateNote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this note.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - notes
+    patch:
+      operationId: partialUpdateNote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this note.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - notes
+    delete:
+      operationId: destroyNote
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this note.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - notes
+  /tags/:
+    get:
+      operationId: listTags
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tag'
+          description: ''
+      tags:
+      - tags
+  /tags/{id}/:
+    get:
+      operationId: retrieveTag
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tag.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+      tags:
+      - tags
+  /api-token-auth/:
+    post:
+      operationId: createAuthToken
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+      tags:
+      - api-token-auth
+components:
+  schemas:
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          maxLength: 100
+        tags:
+          type: array
+          items:
+            type: string
+        body:
+          type: string
+          maxLength: 10000
+        public:
+          type: boolean
+        owner:
+          type: string
+          readOnly: true
+      required:
+      - title
+      - body
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          maxLength: 20
+      required:
+      - name
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - username
+      - password
